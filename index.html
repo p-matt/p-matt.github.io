@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>p-matt — Unity Assets</title>
+<meta name="description" content="Procedural generation tools for Unity. Maze generation and more, on the Unity Asset Store.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1420;
+    --panel: #151d2c;
+    --panel-2: #1a2436;
+    --line: #26324a;
+    --ink: #e8ecf4;
+    --muted: #8b96ab;
+    --star: #f5b841;
+    --star-dim: rgba(245, 184, 65, 0.14);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    /* scene-view style dot grid */
+    background-image: radial-gradient(rgba(139, 150, 171, 0.10) 1px, transparent 1px);
+    background-size: 28px 28px;
+    min-height: 100vh;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    padding: 96px 0 64px;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .eyebrow .dot {
+    color: var(--star);
+  }
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: clamp(40px, 8vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  h1 .accent { color: var(--star); }
+  .tagline {
+    color: var(--muted);
+    font-size: 18px;
+    max-width: 52ch;
+    margin-bottom: 36px;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: transform 0.15s ease, background 0.15s ease;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    background: var(--panel);
+  }
+  .btn:hover { transform: translateY(-2px); background: var(--panel-2); }
+  .btn.primary {
+    background: var(--star);
+    border-color: var(--star);
+    color: #1a1408;
+  }
+  .btn.primary:hover { background: #ffc95c; }
+
+  /* ---------- Sections ---------- */
+  section { padding: 48px 0; border-top: 1px solid var(--line); }
+  h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  /* ---------- Asset cards ---------- */
+  .cards { display: grid; gap: 16px; }
+  .card {
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover { border-color: var(--star); transform: translateY(-2px); }
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .card h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--star);
+    background: var(--star-dim);
+    border-radius: 4px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+  .card p { color: var(--muted); font-size: 15px; }
+
+  /* ---------- About ---------- */
+  .about p { color: var(--muted); max-width: 60ch; }
+  .about a { color: var(--star); text-decoration: none; }
+  .about a:hover { text-decoration: underline; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  footer nav { display: flex; gap: 20px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* ---------- Hidden star easter egg ---------- */
+  #hidden-star {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    opacity: 0.10;
+    transition: opacity 0.3s ease;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--star);
+    font-size: 14px;
+    line-height: 1;
+  }
+  #hidden-star:hover, #hidden-star:focus-visible { opacity: 1; }
+  #hidden-star.found {
+    opacity: 1;
+    animation: twinkle 0.9s ease;
+  }
+  @keyframes twinkle {
+    0%   { transform: scale(1) rotate(0deg); }
+    40%  { transform: scale(2.2) rotate(72deg); }
+    100% { transform: scale(1) rotate(144deg); }
+  }
+  #star-toast {
+    position: fixed;
+    bottom: 48px;
+    right: 22px;
+    background: var(--panel-2);
+    border: 1px solid var(--star);
+    color: var(--ink);
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  #star-toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow"><span class="dot">★</span> PROCEDURAL GENERATION · UNITY</p>
+
+    <h1>Hi, I'm <span class="accent">Matt</span>.<br>I build procedural generation tools for Unity.</h1>
+
+    <p class="tagline">
+      Independent developer based in France. I make focused, well-documented
+      procedural generation assets — tunable, seed-friendly, and ready for
+      both editor and runtime use. No bloat, no dependencies you didn't ask for.
+    </p>
+
+    <div class="cta-row">
+      <a class="btn primary" href="#assets">See the assets →</a>
+      <a class="btn" href="https://github.com/p-matt">GitHub</a>
+      <a class="btn" href="mailto:m4ttornothing@gmail.com">Contact</a>
+    </div>
+  </header>
+
+  <section id="assets">
+    <h2>Assets</h2>
+    <p class="section-sub">Available on the Unity Asset Store.</p>
+
+    <div class="cards">
+      <a class="card" href="#assets">
+        <div class="card-top">
+          <h3>Maze Generator</h3>
+          <span class="tag">coming soon</span>
+        </div>
+        <p>Generate mazes with fully tunable parameters — size, algorithm,
+        dead-end density, seeds and more. Fine-tune the output until it fits
+        your level design, in the editor or at runtime.</p>
+      </a>
+
+      <a class="card" href="#assets">
+        <div class="card-top">
+          <h3>More procedural tools</h3>
+          <span class="tag">in design</span>
+        </div>
+        <p>Maze generation is just the start — more procedural generation
+        assets are on the roadmap, built with the same philosophy: small,
+        tunable, and reliable.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <h2>About</h2>
+    <p>
+      I'm a solo developer working with Unity across desktop and mobile,
+      with a particular interest in procedural generation — the kind of
+      systems that give you infinite content from a handful of well-chosen
+      parameters. My asset tools grow out of my own game projects, so
+      everything I ship has already survived real production use.
+      You can find some of my open-source work on
+      <a href="https://github.com/p-matt">GitHub</a>.
+    </p>
+  </section>
+
+  <footer>
+    <span>© 2026 p-matt</span>
+    <nav>
+      <a href="https://github.com/p-matt">GitHub</a>
+      <a href="#assets">Assets</a>
+    </nav>
+  </footer>
+
+</div>
+
+<button id="hidden-star" aria-label="A hidden star">★</button>
+<div id="star-toast" role="status">You found the star ★</div>
+
+<script>
+  const star = document.getElementById('hidden-star');
+  const toast = document.getElementById('star-toast');
+  star.addEventListener('click', () => {
+    star.classList.add('found');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2600);
+    setTimeout(() => star.classList.remove('found'), 1000);
+  });
+</script>
+
+</body>
+</html>
